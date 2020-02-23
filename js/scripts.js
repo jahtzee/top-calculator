@@ -15,6 +15,7 @@ addAllEventListeners();
 function addAllEventListeners(){
 	addDigitBtnEventListeners();
 	addOperatorBtnEventListeners();
+	addFuncEventListeners();
 }
 
 function addDigitBtnEventListeners() {
@@ -29,15 +30,32 @@ function addOperatorBtnEventListeners() {
 	buttons.forEach( button => {button.addEventListener('click', event => checkInput(event.target.getAttribute('data-value')))});
 }
 
+function addFuncEventListeners() {
+	const sign = document.querySelector('.sign');
+	const clear = document.querySelector('.clear');
+	const equals = document.querySelector('.equals');
+
+	sign.addEventListener('click', event => checkInput(event.target.getAttribute('data-value')));
+	clear.addEventListener('click', () => clearBtnFunc());
+	equals.addEventListener('click', () => evaluateExpression());
+}
+
 function checkInput(value) {
 	if (value === '.') {
 		if (!(isNaN(lastInput)) && !(DisplayBottomValue.includes('.'))) {
 			lastInput = value; 
-			updateDisplayBottom(value);}
+			updateDisplayBottom(value);
+		}
 	} else if (isOperator(value)) {
 		if (!(isOperator(lastInput)) && !(lastInput === '.')) {
 			lastInput = value; 
-			updateDisplayBottom(getOperatorSymbol(value));}
+			updateDisplayBottom(getOperatorSymbol(value));
+		}
+	} else if (value === '-') {
+		if (!(lastInput === '-') && isNaN(lastInput)) {
+			lastInput = value;
+			updateDisplayBottom(value);
+		}
 	} else if (!(isNaN(value)) || lastInput === '') {
 		lastInput = value;
 		updateDisplayBottom(value);
@@ -76,6 +94,12 @@ function getOperatorSymbol(operator) {
 		factorial:'!'
 	}
 	return operators[operator];
+}
+
+function clearBtnFunc() {
+	lastInput = '';
+	DisplayBottomValue = '';
+	updateDisplayBottom('');
 }
 
 //********************
