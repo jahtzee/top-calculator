@@ -2,7 +2,7 @@ function operate(x,y,operator ) {
 	if (!operator) {alert('Please choose a an operator!'); return false;}
 	if (isNaN(x) || isNaN(y)) {alert('Please choose a valid number!'); return false;}
 
-	const result;
+	let result;
 
 	switch (operator) {
 		case 'add':
@@ -31,7 +31,7 @@ function operate(x,y,operator ) {
 			return false;
 	}
 
-	console.log(x+' "'operator+'" '+y+' makes: '+result);
+	console.log(x+' "'+operator+'" '+y+' makes: '+result);
 	return result;
 }
 
