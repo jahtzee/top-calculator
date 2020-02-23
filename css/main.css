@@ -25,15 +25,25 @@
     margin: 50px;	
 }
 
-#display_top {
+#display_top, #display_bottom {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 	width: 100%;
 	border: solid;
+	font-size: 30px;
+	/*text-decoration: underline;*/
 }
 
 #display_bottom {
-	width: 100%;
-	border: solid;
+	font-size: 35px;
+	text-decoration: none;
+	font-weight: bold;
 	border-top: none;
+}
+
+#display_top span, #display_bottom span {
+	margin-right: 10px;
 }
 
 #tmp_container {
@@ -70,7 +80,7 @@
     /* height: auto;*/
 }
 
-.operation {
+.func {
 	margin: 10px 20px 10px 10px;
 	background-color: black;
 }

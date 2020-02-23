@@ -1,4 +1,88 @@
-function operate(x,y,operator ) {
+//********************
+//*       main       *
+//********************
+let lastInput = '';
+let DisplayBottomValue = '';
+
+addAllEventListeners();
+
+
+
+//********************
+//*  user interface  *
+//********************
+
+function addAllEventListeners(){
+	addDigitBtnEventListeners();
+	addOperatorBtnEventListeners();
+}
+
+function addDigitBtnEventListeners() {
+	const buttons = document.querySelectorAll('.digit')
+
+	buttons.forEach( button => {button.addEventListener('click', event => checkInput(event.target.getAttribute('data-value')))} );
+}
+
+function addOperatorBtnEventListeners() {
+	const buttons = document.querySelectorAll('.operator')
+
+	buttons.forEach( button => {button.addEventListener('click', event => checkInput(event.target.getAttribute('data-value')))});
+}
+
+function checkInput(value) {
+	if (value === '.') {
+		if (!(isNaN(lastInput)) && !(DisplayBottomValue.includes('.'))) {
+			lastInput = value; 
+			updateDisplayBottom(value);}
+	} else if (isOperator(value)) {
+		if (!(isOperator(lastInput)) && !(lastInput === '.')) {
+			lastInput = value; 
+			updateDisplayBottom(getOperatorSymbol(value));}
+	} else if (!(isNaN(value)) || lastInput === '') {
+		lastInput = value;
+		updateDisplayBottom(value);
+	}
+}
+
+function updateDisplayBottom(value) {
+	const DisplayBottom = document.getElementById('display_bottom_content');
+	DisplayBottomValue = DisplayBottomValue + value;
+	DisplayBottom.textContent = DisplayBottomValue;
+}
+
+function isOperator(value) {
+	const operators = {
+		add:'+',
+		subtract:'-',
+		multiply:'*',
+		divide:'/',
+		modulo:'%',
+		power:'^',
+		factorial:'!'
+	}
+	if (operators.hasOwnProperty(value)) return true;
+	else return false;
+}
+
+
+function getOperatorSymbol(operator) {
+	const operators = {
+		add:'+',
+		subtract:'-',
+		multiply:'*',
+		divide:'/',
+		modulo:'%',
+		power:'^',
+		factorial:'!'
+	}
+	return operators[operator];
+}
+
+//********************
+//* calculator logic *
+//********************
+
+function operate(x,y,operator) {
 	if (!operator) {alert('Please choose a an operator!'); return false;}
 	if (isNaN(x) || isNaN(y)) {alert('Please choose a valid number!'); return false;}
 
