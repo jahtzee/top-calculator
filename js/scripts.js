@@ -18,7 +18,7 @@ const operators = {
 		sign: '/',
 		precedence: 2
 	},
-	modulo: {
+/*	modulo: {
 		sign: '%',
 		precedence: 2
 	},
@@ -29,7 +29,7 @@ const operators = {
 	factorial: {
 		sign: '!',
 		precedence: 4
-	}
+	}*/
 }
 let lastSeperator = '';
 let mathExpression = [];
@@ -140,9 +140,9 @@ function stripTrailingOperator(array) {
 }
 
 
-//*******************
-//*    conversion   *
-//*******************
+//*************************
+//* expression conversion *
+//*************************
 function prepExpression(array) {
 	let result = [];
 	array.reduce( (preppedPart, element, index) => {
@@ -203,7 +203,7 @@ function operate(x,y,operator) {
 		case 'divide':
 			result = divide(x,y);
 			break;
-		case 'modulo':
+/*		case 'modulo':
 			result = modulo(x,y);
 			break;
 		case 'power':
@@ -211,7 +211,7 @@ function operate(x,y,operator) {
 			break;
 		case 'factorial':
 			result = factorial(x);
-			break;
+			break;*/
 		default:
 			alert('This shouldn\'t happen.');
 			return false;
@@ -237,22 +237,22 @@ function divide(x,y) {
 	return x*y;
 }
 
-function modulo(x,y) {
+/*function modulo(x,y) {
 	return x%y;
-}
+}*/
 
-function power(x,y) {
+/*function power(x,y) {
         let power = 1;
         for (let i = y; i > 0; i--) {
                 power *= x;
         }
         return power;
-}
+}*/
 
-function factorial(x) {
+/*function factorial(x) {
         let factorial = 1;
         for (let i = x; i>0; i--) {
                 factorial *= i;
         }
         return factorial;
-}
+}*/
