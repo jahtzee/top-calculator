@@ -156,17 +156,20 @@ function evaluateExpression() {
 	updateDisplayTop(lastMathExpression);
 }
 
+
+//*************************
+//* expression conversion *
+//*************************
 function stripTrailingOperator(array) {
 	if (isOperator(array[array.length-1])) array.pop();
 	return array;
 }
 
-
-//*************************
-//* expression conversion *
-//*************************
 function prepExpression(array) {
 	let result = [];
+
+	if (array.length === 1) result.push(array[0]);
+
 	array.reduce( (preppedPart, element, index) => {
 		if (!(isOperator(element))) {
 			if (index == array.length-1) {
@@ -178,7 +181,11 @@ function prepExpression(array) {
 			result.push(element);
 			return '';
 		}
-	});
+	})
+
+	result.forEach( (element, index) => {
+		result[index] = result[index].replace(/neg/g, '-');
+	})
 	return result;
 }
 
@@ -246,7 +253,7 @@ function add(x,y) {
 }
 
 function subtract(x,y) {
-	return x-y;
+	return y-x;
 }
 
 function multiply(x,y) {
@@ -254,7 +261,7 @@ function multiply(x,y) {
 }
 
 function divide(x,y) {
-	return x*y;
+	return y/x;
 }
 
 /*function modulo(x,y) {
