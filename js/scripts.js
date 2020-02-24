@@ -1,12 +1,19 @@
 //********************
 //*       main       *
 //********************
-let lastInput = '';
-let DisplayBottomValue = '';
+const operators = {
+	add:'+',
+	subtract:'-',
+	multiply:'*',
+	divide:'/',
+	modulo:'%',
+	power:'^',
+	factorial:'!'
+}
+let lastSeperator = '';
+let mathExpression = [];
 
 addAllEventListeners();
-
-
 
 //********************
 //*  user interface  *
@@ -42,65 +49,92 @@ function addFuncEventListeners() {
 
 function checkInput(value) {
 	if (value === '.') {
-		if (!(isNaN(lastInput)) && !(DisplayBottomValue.includes('.'))) {
-			lastInput = value; 
+		if (!(lastSeperator === '.') && !(isNaN(mathExpression[mathExpression.length-1]))) {
+			lastSeperator = value; 
 			updateDisplayBottom(value);
 		}
 	} else if (isOperator(value)) {
-		if (!(isOperator(lastInput)) && !(lastInput === '.')) {
-			lastInput = value; 
-			updateDisplayBottom(getOperatorSymbol(value));
-		}
-	} else if (value === '-') {
-		if (!(lastInput === '-') && isNaN(lastInput)) {
-			lastInput = value;
+		if (!(isNaN(mathExpression[mathExpression.length-1]))) {
+			lastSeperator = value; 
 			updateDisplayBottom(value);
 		}
-	} else if (!(isNaN(value)) || lastInput === '') {
-		lastInput = value;
+	} else if (value === 'neg') {
+		if (mathExpression[mathExpression.length-1] === 'neg' && isOperator(lastSeperator)) {
+			mathExpression.pop();
+		} else if (isNaN(mathExpression[mathExpression.length-1])) {
+			lastSeperator = value;
+			updateDisplayBottom(value);
+		}
+	} else if (true) {
 		updateDisplayBottom(value);
 	}
 }
 
 function updateDisplayBottom(value) {
 	const DisplayBottom = document.getElementById('display_bottom_content');
-	DisplayBottomValue = DisplayBottomValue + value;
-	DisplayBottom.textContent = DisplayBottomValue;
+	mathExpression.push(value);
+	DisplayBottom.textContent = cleanupForDisplay(mathExpression);
+}
+
+function cleanupForDisplay(array) {
+	let result = mathExpression.toString().replace(/\,/g, '').replace(/neg/g, '-');
+	for (operator in operators) {
+		regex = new RegExp(operator, 'g');
+		result = result.replace(regex, operators[operator]);
+	}
+	return result;
 }
 
 function isOperator(value) {
-	const operators = {
-		add:'+',
-		subtract:'-',
-		multiply:'*',
-		divide:'/',
-		modulo:'%',
-		power:'^',
-		factorial:'!'
-	}
 	if (operators.hasOwnProperty(value)) return true;
 	else return false;
 }
 
 
 function getOperatorSymbol(operator) {
-	const operators = {
-		add:'+',
-		subtract:'-',
-		multiply:'*',
-		divide:'/',
-		modulo:'%',
-		power:'^',
-		factorial:'!'
-	}
 	return operators[operator];
 }
 
 function clearBtnFunc() {
-	lastInput = '';
-	DisplayBottomValue = '';
-	updateDisplayBottom('');
+	const DisplayBottom = document.getElementById('display_bottom_content');
+	lastSeperator = '';
+	mathExpression = [];
+	DisplayBottom.textContent = '';
 }
+
+function evaluateExpression() {
+	const preppedExpression = prepExpression(stripTrailingOperator(mathExpression));
+	//const postfixExpression = infixToPostfix(preppedExpression);
+
+	console.table(preppedExpression);
+}
+
+function stripTrailingOperator(array) {
+	if (isOperator(array[array.length-1])) array.pop();
+	return array;
+}
+
+
+//*******************
+//*    conversion   *
+//*******************
+function prepExpression(array) {
+	let result = [];
+	array.reduce( (preppedPart, element, index) => {
+		if (!(isOperator(element))) {
+			if (index == array.length-1) {
+				result.push(preppedPart+=element);
+			}
+			return preppedPart += element;
+		} else {
+			result.push(preppedPart);
+			result.push(element);
+			return '';
+		}
+	});
+	return result;
+}
+
 
 //********************
 //* calculator logic *
