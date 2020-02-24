@@ -2,13 +2,34 @@
 //*       main       *
 //********************
 const operators = {
-	add:'+',
-	subtract:'-',
-	multiply:'*',
-	divide:'/',
-	modulo:'%',
-	power:'^',
-	factorial:'!'
+	add: {
+		sign: '+',
+		precedence: 1
+	},
+	subtract: {
+		sign: '-',
+		precedence: 1
+	},
+	multiply: {
+		sign: '*',
+		precedence: 2
+	},
+	divide: {
+		sign: '/',
+		precedence: 2
+	},
+	modulo: {
+		sign: '%',
+		precedence: 2
+	},
+	power: {
+		sign: '^',
+		precedence: 3
+	},
+	factorial: {
+		sign: '!',
+		precedence: 4
+	}
 }
 let lastSeperator = '';
 let mathExpression = [];
@@ -80,7 +101,7 @@ function cleanupForDisplay(array) {
 	let result = mathExpression.toString().replace(/\,/g, '').replace(/neg/g, '-');
 	for (operator in operators) {
 		regex = new RegExp(operator, 'g');
-		result = result.replace(regex, operators[operator]);
+		result = result.replace(regex, operators[operator]['sign']);
 	}
 	return result;
 }
@@ -90,9 +111,13 @@ function isOperator(value) {
 	else return false;
 }
 
+function isOperand(value) {
+	if (!(isNaN(value))) return true;
+	else return false;
+}
 
 function getOperatorSymbol(operator) {
-	return operators[operator];
+	return operators[operator]['sign'];
 }
 
 function clearBtnFunc() {
@@ -104,7 +129,7 @@ function clearBtnFunc() {
 
 function evaluateExpression() {
 	const preppedExpression = prepExpression(stripTrailingOperator(mathExpression));
-	//const postfixExpression = infixToPostfix(preppedExpression);
+	const postfixExpression = infixToPostfix(preppedExpression);
 
 	console.table(preppedExpression);
 }
@@ -135,15 +160,34 @@ function prepExpression(array) {
 	return result;
 }
 
+function infixToPostfix(array) {
+	let stack = [];
+	let result = [];
+
+	array.forEach( element => {
+		if (isOperand(element)) {
+			result.push(element);
+		} else if (isOperator(element)) {
+			while ( stack[0] && (operators[stack[stack.length-1]]['precedence'] >= operators[element]['precedence']) ) {
+				result.push(stack.pop());
+			}
+			stack.push(element);
+		}
+	} )
+
+	while (stack[0]) {
+		result.push(stack.pop());
+	}
+
+	console.table(result);
+	return result;
+}
 
 //********************
 //* calculator logic *
 //********************
 
 function operate(x,y,operator) {
-	if (!operator) {alert('Please choose a an operator!'); return false;}
-	if (isNaN(x) || isNaN(y)) {alert('Please choose a valid number!'); return false;}
-
 	let result;
 
 	switch (operator) {
