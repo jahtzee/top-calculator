@@ -97,6 +97,11 @@ function updateDisplayBottom(value) {
 	DisplayBottom.textContent = cleanupForDisplay(mathExpression);
 }
 
+function updateDisplayTop(lastMathExpression) {
+	const DisplayTop = document.getElementById('display_top_content');
+	DisplayTop.textContent = cleanupForDisplay(lastMathExpression)+'=';
+}
+
 function cleanupForDisplay(array) {
 	let result = mathExpression.toString().replace(/\,/g, '').replace(/neg/g, '-');
 	for (operator in operators) {
@@ -130,8 +135,23 @@ function clearBtnFunc() {
 function evaluateExpression() {
 	const preppedExpression = prepExpression(stripTrailingOperator(mathExpression));
 	const postfixExpression = infixToPostfix(preppedExpression);
+	let stack = [];
+	let lastMathExpression = [...mathExpression];
+	
+	while (mathExpression[length-1]) {
+		mathExpression.pop;
+	}
 
-	console.table(preppedExpression);
+	let result = postfixExpression.forEach( element => {
+		if (isOperator(element)) {
+			stack.push(operate( Number(stack.pop()), Number(stack.pop()), element));
+		} else {
+			stack.push(element);
+		}
+		return stack[0];
+	})
+
+	updateDisplayBottom(result);
 }
 
 function stripTrailingOperator(array) {
@@ -178,8 +198,6 @@ function infixToPostfix(array) {
 	while (stack[0]) {
 		result.push(stack.pop());
 	}
-
-	console.table(result);
 	return result;
 }
 
