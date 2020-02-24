@@ -103,7 +103,7 @@ function updateDisplayTop(lastMathExpression) {
 }
 
 function cleanupForDisplay(array) {
-	let result = mathExpression.toString().replace(/\,/g, '').replace(/neg/g, '-');
+	let result = array.toString().replace(/\,/g, '').replace(/neg/g, '-');
 	for (operator in operators) {
 		regex = new RegExp(operator, 'g');
 		result = result.replace(regex, operators[operator]['sign']);
@@ -127,31 +127,33 @@ function getOperatorSymbol(operator) {
 
 function clearBtnFunc() {
 	const DisplayBottom = document.getElementById('display_bottom_content');
+	const DisplayTop = document.getElementById('display_top_content');
+	
 	lastSeperator = '';
 	mathExpression = [];
 	DisplayBottom.textContent = '';
+	DisplayTop.textContent = '';
 }
 
 function evaluateExpression() {
+	if (!(isOperand(mathExpression[mathExpression.length-1]))) return; 
+
 	const preppedExpression = prepExpression(stripTrailingOperator(mathExpression));
 	const postfixExpression = infixToPostfix(preppedExpression);
 	let stack = [];
 	let lastMathExpression = [...mathExpression];
-	
-	while (mathExpression[length-1]) {
-		mathExpression.pop;
-	}
+	mathExpression = [''];
 
-	let result = postfixExpression.forEach( element => {
+	postfixExpression.forEach( element => {
 		if (isOperator(element)) {
 			stack.push(operate( Number(stack.pop()), Number(stack.pop()), element));
 		} else {
 			stack.push(element);
 		}
-		return stack[0];
 	})
 
-	updateDisplayBottom(result);
+	updateDisplayBottom(stack[0]);
+	updateDisplayTop(lastMathExpression);
 }
 
 function stripTrailingOperator(array) {
