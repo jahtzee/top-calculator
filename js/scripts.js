@@ -18,18 +18,6 @@ const operators = {
 		sign: '/',
 		precedence: 2
 	},
-/*	modulo: {
-		sign: '%',
-		precedence: 2
-	},
-	power: {
-		sign: '^',
-		precedence: 3
-	},
-	factorial: {
-		sign: '!',
-		precedence: 4
-	}*/
 }
 let lastSeperator = '';
 let mathExpression = [];
@@ -230,15 +218,6 @@ function operate(x,y,operator) {
 		case 'divide':
 			result = divide(x,y);
 			break;
-/*		case 'modulo':
-			result = modulo(x,y);
-			break;
-		case 'power':
-			result = power(x,y);
-			break;
-		case 'factorial':
-			result = factorial(x);
-			break;*/
 		default:
 			alert('This shouldn\'t happen.');
 			return false;
@@ -263,23 +242,3 @@ function multiply(x,y) {
 function divide(x,y) {
 	return y/x;
 }
-
-/*function modulo(x,y) {
-	return x%y;
-}*/
-
-/*function power(x,y) {
-        let power = 1;
-        for (let i = y; i > 0; i--) {
-                power *= x;
-        }
-        return power;
-}*/
-
-/*function factorial(x) {
-        let factorial = 1;
-        for (let i = x; i>0; i--) {
-                factorial *= i;
-        }
-        return factorial;
-}*/
