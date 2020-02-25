@@ -68,9 +68,10 @@ function checkInput(value) {
 			updateDisplayBottom(value);
 		}
 	} else if (value === 'neg') {
-		if (mathExpression[mathExpression.length-1] === 'neg' && isOperator(lastSeperator)) {
+		if (mathExpression[mathExpression.length-1] === 'neg') {
 			mathExpression.pop();
-		} else if (isNaN(mathExpression[mathExpression.length-1])) {
+			updateDisplayBottom('');
+		} else if ( !(isOperand(mathExpression[mathExpression.length-1])) && (mathExpression[mathExpression.length-1] !== 'neg') ) {
 			lastSeperator = value;
 			updateDisplayBottom(value);
 		}
@@ -105,6 +106,7 @@ function isOperator(value) {
 }
 
 function isOperand(value) {
+	value = parseInt(value);
 	if (!(isNaN(value))) return true;
 	else return false;
 }
